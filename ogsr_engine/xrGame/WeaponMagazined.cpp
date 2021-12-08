@@ -1385,6 +1385,7 @@ float CWeaponMagazined::GetWeaponDeterioration() {
 void CWeaponMagazined::save(NET_Packet &output_packet)
 {
 	inherited::save	(output_packet);
+	save_data		(bMisfire, output_packet);
 	save_data		(m_iQueueSize, output_packet);
 	save_data		(m_iShotNum, output_packet);
 	save_data		(m_iCurFireMode, output_packet);
@@ -1393,7 +1394,14 @@ void CWeaponMagazined::save(NET_Packet &output_packet)
 void CWeaponMagazined::load(IReader &input_packet)
 {
 	inherited::load	(input_packet);
-	load_data		(m_iQueueSize, input_packet);SetQueueSize(m_iQueueSize);
+	try {
+		load_data		(bMisfire, input_packet);
+	}
+	catch(...) {
+		bMisfire = false;
+	}
+	load_data		(m_iQueueSize, input_packet);
+	SetQueueSize(m_iQueueSize);
 	load_data		(m_iShotNum, input_packet);
 	load_data		(m_iCurFireMode, input_packet);
 }
